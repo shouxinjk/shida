@@ -1,4 +1,4 @@
-//FFCreator中尚未实现的animation动画,用来过滤视搭页面不能使用的动画
+//FFCreator中尚未实现的animation动画,用来过滤页面不能使用的动画
 let filtersAnimation =
   {
     label: "未实现",
