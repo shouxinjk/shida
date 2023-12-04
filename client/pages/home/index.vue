@@ -14,7 +14,7 @@
         
         <el-menu-item index="/home/template-list">
           <i class="el-icon-s-shop"></i>
-          <span slot="title">创意模板</span>
+          <span slot="title">模板库</span>
         </el-menu-item>
       </el-menu>
     </div>

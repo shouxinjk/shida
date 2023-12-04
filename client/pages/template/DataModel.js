@@ -70,8 +70,8 @@ let pageConfig = {
 // 项目配置信息字段
 let projectConfig = {
   name: "",
-  title: "视搭视频",
-  description: "我用视搭可视化编辑器做了一个超酷炫的视频，快来看看吧。",
+  title: "More+视频",
+  description: "我用More+视频生成了一个超酷炫的视频，快来看看吧。",
   isTemplate:true,
   coverImage: "",
   author: "",

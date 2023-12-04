@@ -112,7 +112,7 @@ export default {
           elementUiIcon: "el-icon-document"
         },
         {
-          label: "创意模板",
+          label: "模板库",
           value: "templateLibs",
           elementUiIcon: "el-icon-s-shop"
         }
@@ -209,7 +209,7 @@ export default {
     async publishFn() {
   
       //先改名-改过了就不进行
-      if (this.projectData.title === '视搭视频'){
+      if (this.projectData.title === 'More+视频'){
         this.$prompt("请输入标题", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
