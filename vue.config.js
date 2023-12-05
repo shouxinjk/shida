@@ -2,6 +2,7 @@ const path = require("path");
 const fs = require("fs");
 
 let devServer = {
+  disableHostCheck: true, //禁止hostname检查，避免 Invalid Host header
   proxy: {
     // 代理
     "/": {
