@@ -1,7 +1,7 @@
 /**
  * 公共配置文件
  */
-import $config from "../../config";
+import $config from "../../config.json";
 
 const configDict = {
   development: {
