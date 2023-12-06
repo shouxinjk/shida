@@ -9,7 +9,7 @@ module.exports = app => {
       title: { type: String, default: "视频X" },
       videoUrl: { type: String, default: null },
       coverImage: { type: String, default: "" },
-      description: { type: String, default: "我用FFCreator可视化编辑器做了一个超酷炫的视频，快来看看吧。" },
+      description: { type: String, default: "我用More+生成了一个超酷炫的视频，快来看看吧。" },
       shareConfig: {
         shareWx: false,
         coverImage: { type: String, default: "" },

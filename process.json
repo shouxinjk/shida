@@ -1,0 +1,15 @@
+{
+  "apps" : [{
+    "name"        : "video-designer",
+    "script"      : "server/app.js",
+    "env": {
+      "DISPLAY": ":99"
+    }
+  },
+    {
+      "name"        : "Xvfb",
+      "interpreter" : "none",
+      "script"      : "Xvfb",
+      "args"        : ":99 -ac -screen 0 1280x1024x24"
+    }]
+}

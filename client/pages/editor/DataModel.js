@@ -67,7 +67,7 @@ let pageConfig = {
 let projectConfig = {
   name: "",
   title: "More+视频",
-  description: "我用More+视频生成了一个超酷炫的视频，快来看看吧。",
+  description: "我用More+生成了一个超酷炫的视频，快来看看吧。",
   coverImage: "",
   author: "",
   script: "",
