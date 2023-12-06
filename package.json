@@ -11,7 +11,7 @@
     "watch-build": "vue-cli-service build --watch",
     "watch-dist": "chokidar \"dist/**/*\" -d 2000 -t 2000 -c \"node ./scripts/publish\"",
     "watch-publish": "npm run watch-build & npm run watch-dist",
-    "start": "NODE_PORT=4044 pm2 start server/app.js",
+    "start": "pm2 start server/app.js",
     "lib:h5-swiper": "vue-cli-service build --target lib --name page-engine --dest server/public/engine_libs/h5-swiper engine-template/engine-h5-swiper/index.js"
   },
   "dependencies": {
