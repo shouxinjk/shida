@@ -6,6 +6,7 @@ const {FFRect, FFScene, FFImage, FFText, FFGifImage, FFVideo, FFAlbum, FFCreator
 const ffmpeg = require('fluent-ffmpeg');
 const {scaleVideoByCenter} = require("../../utils/crop");
 
+const FFLottie = require('ffcreator/lib/node/lottie');//获取Lottie对象 2024-10-08新增代码
 
 const fontRootPath = path.join(__dirname, '../public/static/fonts/');
 
@@ -47,17 +48,24 @@ const addComponent = async element => {
   switch (element.elName) {
     case 'qk-image':
       url = getImgPath(element.propsValue);
-      // console.log(element.propsValue)
-      console.log(url)
+      console.log("element propsValue",element.propsValue)
+      console.log("url",url)
       // url = path.join(__dirname, '../public', element.propsValue.imageSrc)
       const imgExt = path.extname(url).split('.').pop()
+      console.log("imgExt",imgExt)
       if (imgExt === 'GIF' || imgExt === 'gif') {
         if (process.env.NODE_ENV !== 'dev' && process.env.NODE_ENV !== 'production') {
           url = path.join(__dirname, '../public', url)
         }
         comp = new FFGifImage({path: url, ...commomStyle})
-      } else {
-        comp = new FFImage({path: url, ...commomStyle})
+      }else if (imgExt === 'json') {//判断是否是lottie动画类型
+        console.log("lottie json")
+         // add lottie comp
+         comp = new FFLottie({
+          data: element.propsValue.data,...commomStyle
+         })
+      }else {
+        comp = new FFImage({file: url, ...commomStyle})
       }
       break;
 
@@ -77,10 +85,6 @@ const addComponent = async element => {
       }else {
         comp.setFont('../public/static/demo/wryh.ttf');
       }
-
-
-
-
       comp.setAnchor(0.5);
       comp.alignCenter();
       break;
@@ -97,9 +101,7 @@ const addComponent = async element => {
         url = videoUrlCropped;
       }
       comp = new FFVideo({path: url, ...commomStyle});
-
       break;
-
 
     case 'qk-image-carousel':
       // console.log("carousel")
@@ -156,8 +158,6 @@ async function getVideoScreenshot(inputVideo, saveDir, fileName) {
 
 // 服务类
 module.exports = app => ({
-
-
   async createFFTask({videoData, folderId, uuid}, id) {
     const {ctx, $model} = app;
     const {width, height, fps, audio} = videoData;
@@ -175,6 +175,23 @@ module.exports = app => ({
       debug: false,
       parallel: 8,
     });
+    
+    //增加Lottie动画
+    // const fetch = await import('node-fetch');
+    // const resp = await fetch.default('https://gw.alipayobjects.com/os/finxbff/2d0c4a95-568f-4923-bef0-e20fca6018ca/7abc1e3d-c381-49ed-ad54-3a48366f0180.json')
+    // const json = await resp.json();
+    // // const asset = json.assets.find(a => a.id === '7')
+    // // asset.p = 'https://gw.alipayobjects.com/mdn/rms_91e1e4/afts/img/A*2mfsTo-gbDgAAAAAAAAAAABkARQnAQ'
+    // const lottie = new FFLottie({
+    //   x: width / 2,
+    //   y: height / 2,
+    //   width,
+    //   height,
+    //   data: json,//json数据
+    //   loop: true,
+    //   fps
+    // });
+    // lottie.replaceText('${文本}', '拾亿');
 
     for (let i = 0; i < videoData.pages.length; i++) {
       const page = videoData.pages[i];
@@ -184,12 +201,18 @@ module.exports = app => ({
       scene.setBgColor(backgroundColor);
       scene.setDuration(duration);
       scene.setTransition(trans, transDuration);
+      // scene.addChild(lottie);//添加Lottie动画 2024-10-08新增代码
       creator.addChild(scene);
 
       for (let j = 0; j < page.elements.length; j++) {
         const element = page.elements[j];
         const comp = await addComponent(element);
         if (comp) scene.addChild(comp);
+        //2024-10-08新增代码
+        // if (comp) {
+        //   scene.addChild(comp);
+        //   scene.addChild(lottie);//添加Lottie动画
+        // }
       }
     }
     creator.start();
