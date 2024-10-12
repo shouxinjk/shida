@@ -31,7 +31,7 @@ async function cropVideoByCenter(inputVideoPath, targetWidth, targetHeight, outp
         console.log(progress)
       })
       .on('error', function (err) {
-        console.log('cropVideoByCenter出错了')
+        console.log('cropVideoByCenter出错了',err)
         rej(err)
       })
       .on('end', function () {
@@ -56,7 +56,7 @@ async function getDimension(media) {
         rej(err)
       }
       // console.log(metadata.streams[0].width)
-      // console.log(metadata)
+      console.log("metadata",metadata)
       res({
         width: metadata.streams[0].width,
         height: metadata.streams[0].height
@@ -133,7 +133,9 @@ async function scaleVideoByCenter(originVideo, targetWidth, targetHeight, output
       height,
       outputPath
     )
+    console.log("cropped:",originVideo,outputPath);
     return await resizeVideoByCenter(cropped, targetWidth, targetHeight, outputPath)
+    // return await resizeVideoByCenter(cropped.originVideo, targetWidth, targetHeight, outputPath)
   } else if ((width / height).toFixed(2) < (targetWidth / targetHeight).toFixed(2)) {
     //当原视频的宽高比 小于 目标宽高比 -- 需要填充
     return await resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath, true)

@@ -7,10 +7,9 @@ const ffmpeg = require('fluent-ffmpeg');
 const {scaleVideoByCenter} = require("../../utils/crop");
 
 const FFLottie = require('ffcreator/lib/node/lottie');//获取Lottie对象 2024-10-08新增代码
+const axios = require('axios'); 
 
 const fontRootPath = path.join(__dirname, '../public/static/fonts/');
-
-
 
 //字体判断
 function walk(path, it) {
@@ -20,6 +19,18 @@ function walk(path, it) {
       return fontFile;
     }
   }
+}
+
+//图片预加载处理（重要）
+async function preloadImage(imageUrl) {  
+  try {  
+    const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });  
+    const imageBuffer = Buffer.from(response.data, 'binary');
+    console.log(`Image preloaded: ${imageUrl}`);
+    return imageBuffer;
+  } catch (error) {  
+    console.error(`Failed to preload image: ${imageUrl}`, error);  
+  }  
 }
 
 
@@ -59,11 +70,20 @@ const addComponent = async element => {
         }
         comp = new FFGifImage({path: url, ...commomStyle})
       }else if (imgExt === 'json') {//判断是否是lottie动画类型
-        console.log("lottie json")
+        console.log("lottie json",element.propsValue.data)
          // add lottie comp
          comp = new FFLottie({
           data: element.propsValue.data,...commomStyle
          })
+         let assets = element.propsValue.replaceAssets;
+         let texts = element.propsValue.replaceTexts;
+         for (const asset of assets) {
+          const path = await preloadImage(asset.path);  
+          await comp.replaceAsset(asset.id,path,true);
+         }
+         for (const text of texts) {
+          await comp.replaceText(text.target,text.txt);
+         }
       }else {
         comp = new FFImage({file: url, ...commomStyle})
       }
@@ -91,7 +111,7 @@ const addComponent = async element => {
 
     case 'qk-video':
       url = getNetPath(element.propsValue.videoSrc);
-      console.log(url)
+      console.log("video url",url)
       // url = path.join(__dirname, '../public', element.propsValue.videoSrc)
       let videoUrlCropped = ''
       videoUrlCropped = `${path.dirname(url)}/${path.basename(url).split('.')
