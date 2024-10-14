@@ -33,7 +33,6 @@ async function preloadImage(imageUrl) {
   }  
 }
 
-
 // 添加对应类型组件
 const addComponent = async element => {
   let comp, url;
@@ -72,8 +71,11 @@ const addComponent = async element => {
       }else if (imgExt === 'json') {//判断是否是lottie动画类型
         console.log("lottie json",element.propsValue.data)
          // add lottie comp
+        const fetch = await import('node-fetch');
+        const resp = await fetch.default(element.propsValue.imageSrc);//用于读取lottie json数据
+        const json = await resp.json();
          comp = new FFLottie({
-          data: element.propsValue.data,...commomStyle
+          data: json,...commomStyle
          })
          let assets = element.propsValue.replaceAssets;
          let texts = element.propsValue.replaceTexts;
@@ -85,6 +87,7 @@ const addComponent = async element => {
           await comp.replaceText(text.target,text.txt);
          }
       }else {
+        // const imgUrl = await preloadImage(url); 
         comp = new FFImage({file: url, ...commomStyle})
       }
       break;
