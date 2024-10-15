@@ -64,9 +64,9 @@ const addComponent = async element => {
       const imgExt = path.extname(url).split('.').pop()
       console.log("imgExt",imgExt)
       if (imgExt === 'GIF' || imgExt === 'gif') {
-        if (process.env.NODE_ENV !== 'dev' && process.env.NODE_ENV !== 'production') {
-          url = path.join(__dirname, '../public', url)
-        }
+        // if (process.env.NODE_ENV !== 'dev' && process.env.NODE_ENV !== 'production') {
+        //   url = path.join(__dirname, '../public', url)
+        // }
         comp = new FFGifImage({path: url, ...commomStyle})
       }else if (imgExt === 'json') {//判断是否是lottie动画类型
         console.log("lottie json",element.propsValue.data)
@@ -74,18 +74,18 @@ const addComponent = async element => {
         const fetch = await import('node-fetch');
         const resp = await fetch.default(element.propsValue.imageSrc);//用于读取lottie json数据
         const json = await resp.json();
-         comp = new FFLottie({
+        comp = new FFLottie({
           data: json,...commomStyle
-         })
-         let assets = element.propsValue.replaceAssets;
-         let texts = element.propsValue.replaceTexts;
-         for (const asset of assets) {
+        })
+        let assets = element.propsValue.replaceAssets;
+        let texts = element.propsValue.replaceTexts;
+        for (const asset of assets) {
           const path = await preloadImage(asset.path);  
           await comp.replaceAsset(asset.id,path,true);
-         }
-         for (const text of texts) {
+        }
+        for (const text of texts) {
           await comp.replaceText(text.target,text.txt);
-         }
+        }
       }else {
         // const imgUrl = await preloadImage(url); 
         comp = new FFImage({file: url, ...commomStyle})
