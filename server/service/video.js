@@ -119,9 +119,9 @@ const addComponent = async element => {
       console.log("video url",url)
       // url = path.join(__dirname, '../public', element.propsValue.videoSrc)
       let videoUrlCropped = ''
-      console.log("savePath",savePath.tmpVideoUrl)
+      console.log("savePath",savePath.tmpVideoDir)
       // videoUrlCropped = `G:\\video\\videos\\tmpVideo_`+new Date().getTime()+`.${path.basename(url).split('.').pop()}`;//本地测试
-      videoUrlCropped = `${savePath.tmpVideoUrl}/tmpVideo_`+new Date().getTime()+`.${path.basename(url).split('.').pop()}`;
+      videoUrlCropped = `${savePath.tmpVideoDir}/tmpVideo_`+new Date().getTime()+`.${path.basename(url).split('.').pop()}`;
       console.log("videoUrlCropped",videoUrlCropped)
       // videoUrlCropped = `${path.dirname(url)}/${path.basename(url).split('.')
       //   .shift()}_handled.${path.basename(url).split('.').pop()}`;//原项目代码
