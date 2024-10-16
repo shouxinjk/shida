@@ -1,5 +1,6 @@
 /* eslint-disable no-case-declarations */
 const path = require('path');
+const saveDir = require('../../server/config/index');//下载的在线视频存放路径
 const fs = require('fs-extra');
 const {isEmpty, forEach} = require('lodash');
 const {FFRect, FFScene, FFImage, FFText, FFGifImage, FFVideo, FFAlbum, FFCreator} = require('ffcreator');
@@ -54,6 +55,7 @@ const addComponent = async element => {
     if (localPath) return localPath;
     return getNetPath(imageSrc);
   };
+  //
 
   switch (element.elName) {
     case 'qk-image':
@@ -117,8 +119,12 @@ const addComponent = async element => {
       console.log("video url",url)
       // url = path.join(__dirname, '../public', element.propsValue.videoSrc)
       let videoUrlCropped = ''
-      videoUrlCropped = `${path.dirname(url)}/${path.basename(url).split('.')
-        .shift()}_handled.${path.basename(url).split('.').pop()}`;
+      console.log("saveDir",saveDir.tmpVideoUrl)
+      // videoUrlCropped = `G:\\video\\videos\\tmpVideo_`+new Date().getTime()+`.${path.basename(url).split('.').pop()}`;//本地测试
+      videoUrlCropped = `${saveDir.tmpVideoUrl}/tmpVideo_`+new Date().getTime()+`.${path.basename(url).split('.').pop()}`;
+      console.log("videoUrlCropped",videoUrlCropped)
+      // videoUrlCropped = `${path.dirname(url)}/${path.basename(url).split('.')
+      //   .shift()}_handled.${path.basename(url).split('.').pop()}`;//原项目代码
       await scaleVideoByCenter(url, commomStyle.width, commomStyle.height, videoUrlCropped);
       if (videoUrlCropped) {
         url = videoUrlCropped;

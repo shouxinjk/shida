@@ -81,7 +81,6 @@ function resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath,
     let ff = ffmpeg()
       .input(originVideo)
       .size(`${targetWidth}x${targetHeight}`)
-
     //autoPad: boolean
     autoPad ? (ff = ff.autoPad(autoPad, padColor)) : null
 
@@ -134,8 +133,8 @@ async function scaleVideoByCenter(originVideo, targetWidth, targetHeight, output
       outputPath
     )
     console.log("cropped:",originVideo,outputPath);
-    return await resizeVideoByCenter(cropped, targetWidth, targetHeight, outputPath)
-    // return await resizeVideoByCenter(cropped.originVideo, targetWidth, targetHeight, outputPath)
+    // return await resizeVideoByCenter(cropped, targetWidth, targetHeight, outputPath)
+    return await resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath)
   } else if ((width / height).toFixed(2) < (targetWidth / targetHeight).toFixed(2)) {
     //当原视频的宽高比 小于 目标宽高比 -- 需要填充
     return await resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath, true)
