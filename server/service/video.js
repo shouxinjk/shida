@@ -72,7 +72,6 @@ const addComponent = async element => {
         comp = new FFGifImage({path: url, ...commomStyle})
       }else if (imgExt === 'json') {//判断是否是lottie动画类型
         console.log("lottie json",element.propsValue.data)
-         // add lottie comp
         const fetch = await import('node-fetch');
         const resp = await fetch.default(element.propsValue.imageSrc);//用于读取lottie json数据
         const json = await resp.json();
@@ -82,15 +81,14 @@ const addComponent = async element => {
         let assets = element.propsValue.replaceAssets;
         let texts = element.propsValue.replaceTexts;
         for (const asset of assets) {
-          const path = await preloadImage(asset.path);  
+          const path = await preloadImage(asset.path);
           await comp.replaceAsset(asset.id,path,true);
         }
         for (const text of texts) {
           await comp.replaceText(text.target,text.txt);
         }
       }else {
-        // const imgUrl = await preloadImage(url); 
-        comp = new FFImage({file: url, ...commomStyle})
+        comp = new FFImage({path: url, ...commomStyle})
       }
       break;
 
@@ -204,23 +202,6 @@ module.exports = app => ({
       debug: false,
       parallel: 8,
     });
-    
-    //增加Lottie动画
-    // const fetch = await import('node-fetch');
-    // const resp = await fetch.default('https://gw.alipayobjects.com/os/finxbff/2d0c4a95-568f-4923-bef0-e20fca6018ca/7abc1e3d-c381-49ed-ad54-3a48366f0180.json')
-    // const json = await resp.json();
-    // // const asset = json.assets.find(a => a.id === '7')
-    // // asset.p = 'https://gw.alipayobjects.com/mdn/rms_91e1e4/afts/img/A*2mfsTo-gbDgAAAAAAAAAAABkARQnAQ'
-    // const lottie = new FFLottie({
-    //   x: width / 2,
-    //   y: height / 2,
-    //   width,
-    //   height,
-    //   data: json,//json数据
-    //   loop: true,
-    //   fps
-    // });
-    // lottie.replaceText('${文本}', '拾亿');
 
     for (let i = 0; i < videoData.pages.length; i++) {
       const page = videoData.pages[i];
@@ -230,18 +211,12 @@ module.exports = app => ({
       scene.setBgColor(backgroundColor);
       scene.setDuration(duration);
       scene.setTransition(trans, transDuration);
-      // scene.addChild(lottie);//添加Lottie动画 2024-10-08新增代码
       creator.addChild(scene);
 
       for (let j = 0; j < page.elements.length; j++) {
         const element = page.elements[j];
         const comp = await addComponent(element);
         if (comp) scene.addChild(comp);
-        //2024-10-08新增代码
-        // if (comp) {
-        //   scene.addChild(comp);
-        //   scene.addChild(lottie);//添加Lottie动画
-        // }
       }
     }
     creator.start();
