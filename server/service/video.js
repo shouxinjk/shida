@@ -135,7 +135,8 @@ const addComponent = async element => {
       const list = element.propsValue.imageSrcList.map(x => getImgPath({imageSrc: x}));
       comp = new FFAlbum({list, showCover: true, ...commomStyle});
       comp.setTransition('zoomIn');
-      comp.setDuration(1);
+      comp.setDuration(element.propsValue.interval);
+      comp.setTransTime(0.5)
       break;
   }
 
