@@ -136,7 +136,7 @@ const addComponent = async element => {
       comp = new FFAlbum({list, showCover: true, ...commomStyle});
       comp.setTransition('zoomIn');
       comp.setDuration(element.propsValue.interval);
-      comp.setTransTime(0.5)
+      comp.setTransTime(1)
       break;
   }
 
