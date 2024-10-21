@@ -38,9 +38,10 @@ async function preloadImage(imageUrl) {
 const addComponent = async element => {
   let comp, url;
   const {left = 0, top = 0, width, height} = element.commonStyle || {};
+  let style = element.commonStyle;
   const x = left + width / 2;
   const y = top + height / 2;
-  const commomStyle = {x, y, width, height};
+  const commomStyle = {x, y, width, height, style};
 
   const getNetPath = url => {
     if (/^(http|https|www)/gi.test(url)) return url;
@@ -60,8 +61,8 @@ const addComponent = async element => {
   switch (element.elName) {
     case 'qk-image':
       url = getImgPath(element.propsValue);
-      console.log("element propsValue",element.propsValue)
-      console.log("url",url)
+      console.log("...commomStyle",commomStyle)
+      // console.log("url",url)
       // url = path.join(__dirname, '../public', element.propsValue.imageSrc)
       const imgExt = path.extname(url).split('.').pop()
       console.log("imgExt",imgExt)
@@ -71,7 +72,6 @@ const addComponent = async element => {
         // }
         comp = new FFGifImage({path: url, ...commomStyle})
       }else if (imgExt === 'json') {//判断是否是lottie动画类型
-        console.log("lottie json",element.propsValue.data)
         const fetch = await import('node-fetch');
         const resp = await fetch.default(element.propsValue.imageSrc);//用于读取lottie json数据
         const json = await resp.json();
@@ -89,6 +89,9 @@ const addComponent = async element => {
         }
       }else {
         comp = new FFImage({path: url, ...commomStyle})
+        if(commomStyle.style.opacity){
+          comp.setOpacity(commomStyle.style.opacity);
+        }
       }
       break;
 
@@ -108,7 +111,7 @@ const addComponent = async element => {
       }else {
         comp.setFont('../public/static/demo/wryh.ttf');
       }
-      comp.setAnchor(0.5);
+      comp.setAnchor(1);
       comp.alignCenter();
       break;
 
@@ -117,10 +120,8 @@ const addComponent = async element => {
       console.log("video url",url)
       // url = path.join(__dirname, '../public', element.propsValue.videoSrc)
       let videoUrlCropped = ''
-      console.log("savePath",savePath.tmpVideoDir)
       // videoUrlCropped = `G:\\video\\videos\\tmpVideo_`+new Date().getTime()+`.${path.basename(url).split('.').pop()}`;//本地测试
       videoUrlCropped = `${savePath.tmpVideoDir}/tmpVideo_`+new Date().getTime()+`.${path.basename(url).split('.').pop()}`;
-      console.log("videoUrlCropped",videoUrlCropped)
       // videoUrlCropped = `${path.dirname(url)}/${path.basename(url).split('.')
       //   .shift()}_handled.${path.basename(url).split('.').pop()}`;//原项目代码
       await scaleVideoByCenter(url, commomStyle.width, commomStyle.height, videoUrlCropped);
@@ -128,6 +129,9 @@ const addComponent = async element => {
         url = videoUrlCropped;
       }
       comp = new FFVideo({path: url, ...commomStyle});
+      if(commomStyle.style.opacity){
+        comp.setOpacity(commomStyle.style.opacity);
+      }
       break;
 
     case 'qk-image-carousel':
