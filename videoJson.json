@@ -352,6 +352,7 @@
       "label": "文字动画",
       "name": "animations",
       "multiple": true,
+      "hidden": true,
       "options": [
         {"label": "渐显", "value": "fadeIn"},
         {"label": "向左进入", "value": "fadeInLeft"},
@@ -580,45 +581,12 @@
       "label": "背景音乐",
       "name": "music",
       "onlyChildren": true,
-      "options": [
-        {
-          "label": "古典",
-          "value": "A"
-        },
-        {
-          "label": "轻音乐",
-          "value": "B",
-          "children": [
-            {
-              "label": "菊次郎的夏天",
-              "value": "b1"
-            },
-            {
-              "label": "出埃及记",
-              "value": "b2"
-            }
-          ]
-        },
-        {
-          "label": "选项C",
-          "value": "C",
-          "children": [
-            {
-              "label": "选项c1",
-              "value": "c1"
-            },
-            {
-              "label": "选项c2",
-              "value": "c2"
-            }
-          ]
-        }
-      ],
+      "options": [],
       "id": "u:dff0b044a369",
-      "searchable": false,
-      "onlyLeaf": false,
+      "searchable": true,
+      "onlyLeaf": true,
       "multiple": false,
-      "value": "b1"
+      "value": ""
     },
     {
       "type": "radios",

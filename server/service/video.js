@@ -204,9 +204,11 @@ module.exports = app => ({
       height,
       fps,
       cover,
-      audio: localAudio,
+      audio,
+      // audio: localAudio,
       debug: false,
       parallel: 8,
+      audioLoop: true
     });
     for (let i = 0; i < videoData.pages.length; i++) {
       const page = videoData.pages[i];
