@@ -192,7 +192,7 @@ async function getVideoScreenshot(inputVideo, saveDir, fileName) {
 module.exports = app => ({
   async createFFTask({videoData, folderId, uuid}, id) {
     const {ctx, $model} = app;
-    const {width, height, fps, audio} = videoData;
+    const {width, height, fps, cover, audio} = videoData;
     const outputDir = path.join(__dirname, '../public/resource/videos', id)
     const cacheDir = path.join(__dirname, '../cache/', id)
     const localAudio = audio ? path.join(__dirname, '../public', audio) : null;
@@ -203,11 +203,11 @@ module.exports = app => ({
       width,
       height,
       fps,
+      cover,
       audio: localAudio,
       debug: false,
       parallel: 8,
     });
-
     for (let i = 0; i < videoData.pages.length; i++) {
       const page = videoData.pages[i];
       const {duration, transDuration, trans, backgroundColor} = page.data;

@@ -35,6 +35,20 @@
       "value": "15"
     },
     {
+      "type": "input-image",
+      "label": "视频封面",
+      "name": "cover",
+      "autoUpload": true,
+      "proxy": true,
+      "uploadType": "fileReceptor",
+      "imageClassName": "r w-full",
+      "id": "u:fga20f0af469",
+      "accept": ".jpeg, .jpg, .png",
+      "multiple": false,
+      "hideUploadButton": false,
+      "required": true
+    },
+    {
       "type": "input-text",
       "label": "公司名称",
       "name": "corpName",
