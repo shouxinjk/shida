@@ -124,6 +124,10 @@
       "name": "font",
       "options": [
         {
+          "label": "宋体常规",
+          "value": "SourceHanSerifSC.woff"
+        },
+        {
           "label": "今年也要加油鸭",
           "value": "今年也要加油鸭.ttf"
         },
@@ -138,11 +142,15 @@
         {
           "label": "Aa剑豪体",
           "value": "Aa剑豪体.ttf"
+        },
+        {
+          "label": "胡晓波猛男体常规",
+          "value": "HuXiaoBo-MengNanTi.woff"
         }
       ],
       "id": "u:4bf5d28bc69d",
       "multiple": false,
-      "value": "云峰飞云体"
+      "value": "SourceHanSerifSC.woff"
     },
     {
     "type": "input-color",

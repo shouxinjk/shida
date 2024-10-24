@@ -61,7 +61,7 @@ const addComponent = async element => {
   switch (element.elName) {
     case 'qk-image':
       url = getImgPath(element.propsValue);
-      console.log("...commomStyle",commomStyle)
+      // console.log("...commomStyle",commomStyle)
       // console.log("url",url)
       // url = path.join(__dirname, '../public', element.propsValue.imageSrc)
       const imgExt = path.extname(url).split('.').pop()
@@ -91,6 +91,10 @@ const addComponent = async element => {
         comp = new FFImage({path: url, ...commomStyle})
         if(commomStyle.style.opacity){
           comp.setOpacity(commomStyle.style.opacity);
+          comp.setScale
+        }
+        if(commomStyle.style.scale){
+          comp.setScale(commomStyle.style.scale);
         }
       }
       break;
