@@ -76,6 +76,7 @@ async function getDimension(media) {
  * @returns {Promise<unknown>}
  */
 function resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath, autoPad = false, padColor) {
+  outputPath = outputPath.split('.')[0] + "_resized." + outputPath.split('.').pop();//输出目录添加后缀，解决输入与输出文件名重复的问题
   return new Promise((res, rej) => {
     //设置输出帧的大小
     let ff = ffmpeg()
@@ -132,9 +133,8 @@ async function scaleVideoByCenter(originVideo, targetWidth, targetHeight, output
       height,
       outputPath
     )
-    console.log("cropped:",cropped);
-    // return await resizeVideoByCenter(cropped, targetWidth, targetHeight, outputPath)
-    return await resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath)
+    console.log("cropped is",cropped);
+    return await resizeVideoByCenter(cropped, targetWidth, targetHeight, outputPath)
   } else if ((width / height).toFixed(2) < (targetWidth / targetHeight).toFixed(2)) {
     //当原视频的宽高比 小于 目标宽高比 -- 需要填充
     return await resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath, true)
