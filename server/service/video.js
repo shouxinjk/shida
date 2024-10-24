@@ -87,11 +87,13 @@ const addComponent = async element => {
         for (const text of texts) {
           await comp.replaceText(text.target,text.txt);
         }
+        if(commomStyle.style.scale){
+          comp.setScale(commomStyle.style.scale);
+        }
       }else {
         comp = new FFImage({path: url, ...commomStyle})
         if(commomStyle.style.opacity){
           comp.setOpacity(commomStyle.style.opacity);
-          comp.setScale
         }
         if(commomStyle.style.scale){
           comp.setScale(commomStyle.style.scale);
