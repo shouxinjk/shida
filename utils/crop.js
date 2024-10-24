@@ -132,9 +132,9 @@ async function scaleVideoByCenter(originVideo, targetWidth, targetHeight, output
       height,
       outputPath
     )
-    console.log("cropped:",originVideo,outputPath);
-    // return await resizeVideoByCenter(cropped, targetWidth, targetHeight, outputPath)
-    return await resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath)
+    console.log("cropped:",cropped);
+    return await resizeVideoByCenter(cropped, targetWidth, targetHeight, outputPath)
+    // return await resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath)
   } else if ((width / height).toFixed(2) < (targetWidth / targetHeight).toFixed(2)) {
     //当原视频的宽高比 小于 目标宽高比 -- 需要填充
     return await resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath, true)

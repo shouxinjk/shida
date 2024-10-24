@@ -214,7 +214,8 @@ module.exports = app => ({
       // audio: localAudio,
       debug: false,
       parallel: 8,
-      audioLoop: true
+      audioLoop: true,
+      antialias: true//开启平滑模式
     });
     for (let i = 0; i < videoData.pages.length; i++) {
       const page = videoData.pages[i];
