@@ -3,7 +3,7 @@ const path = require('path');
 const savePath = require('../../server/config/index');//下载的在线视频存放路径
 const fs = require('fs-extra');
 const {isEmpty, forEach} = require('lodash');
-const {FFRect, FFScene, FFImage, FFText, FFGifImage, FFVideo, FFAlbum, FFCreator} = require('ffcreator');
+const {FFSubtitle, FFRect, FFScene, FFImage, FFText, FFGifImage, FFVideo, FFAlbum, FFCreator} = require('ffcreator');
 const ffmpeg = require('fluent-ffmpeg');
 const {scaleVideoByCenter} = require("../../utils/crop");
 
@@ -106,6 +106,21 @@ const addComponent = async element => {
       comp = new FFRect({color, ...commomStyle});
       break;
 
+    case 'qk-subtitle':
+      console.error("subtitle element",element);
+      const content = element.propsValue.content;
+      comp = new FFSubtitle({content, ...commomStyle});
+      comp.setXY(element.propsValue.x, element.propsValue.y)
+      comp.setFrameBuffer(element.propsValue.frameBuffer || 24);
+      comp.setText(content);
+      // comp.setStyle(element.style);
+      comp.setFontSize(element.propsValue.fontSize || 24);
+      comp.setColor(element.propsValue.color || '#fff');
+      comp.setBackgroundColor(element.propsValue.backgroundColor || '');
+      comp.setDuration(element.propsValue.duration || 1);
+      console.error("subtitle comp",comp);
+      break;
+
     case 'qk-text':
       const text = element.propsValue.text;
       const fontName = element.propsValue.font.split('/')[1];
@@ -146,7 +161,7 @@ const addComponent = async element => {
       comp = new FFAlbum({list, showCover: true, ...commomStyle});
       comp.setTransition('zoomIn');
       comp.setDuration(element.propsValue.interval);
-      comp.setTransTime(1.5)
+      comp.setTransTime(element.propsValue.transitionTime || 0)
       break;
   }
 
