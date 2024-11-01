@@ -118,7 +118,7 @@ const addComponent = async element => {
       comp.setColor(element.propsValue.color || '#fff');
       comp.setBackgroundColor(element.propsValue.backgroundColor || '');
       comp.setDuration(element.propsValue.duration || 1);
-      console.error("subtitle comp",comp);
+      // console.error("subtitle comp",comp);
       break;
 
     case 'qk-text':
@@ -141,12 +141,15 @@ const addComponent = async element => {
       console.log("video url",url)
       // url = path.join(__dirname, '../public', element.propsValue.videoSrc)
       let videoUrlCropped = ''
-      // videoUrlCropped = `G:\\video\\videos\\tmpVideo_`+new Date().getTime()+`.${path.basename(url).split('.').pop()}`;//本地测试
-      videoUrlCropped = `${savePath.tmpVideoDir}/tmpVideo_`+new Date().getTime()+`.${path.basename(url).split('.').pop()}`;
+      // videoUrlCropped = `G:\\video\\videos\\tmpVideo_`+new Date().getTime();//本地测试
+      videoUrlCropped = `${savePath.tmpVideoDir}/tmpVideo_`+new Date().getTime();
       // videoUrlCropped = `${path.dirname(url)}/${path.basename(url).split('.')
       //   .shift()}_handled.${path.basename(url).split('.').pop()}`;//原项目代码
       await scaleVideoByCenter(url, commomStyle.width, commomStyle.height, videoUrlCropped);
       if (videoUrlCropped) {
+        if(!videoUrlCropped.endsWith('.mp4')){
+          videoUrlCropped += '_resized.mp4';
+        }
         url = videoUrlCropped;
       }
       comp = new FFVideo({path: url, ...commomStyle});

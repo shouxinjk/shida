@@ -76,7 +76,7 @@ async function getDimension(media) {
  * @returns {Promise<unknown>}
  */
 function resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath, autoPad = false, padColor) {
-  outputPath = outputPath.split('.')[0] + "_resized." + outputPath.split('.').pop();//输出目录添加后缀，解决输入与输出文件名重复的问题
+  outputPath = outputPath.split('.')[0] + "_resized.mp4";//输出目录添加后缀，解决输入与输出文件名重复的问题
   return new Promise((res, rej) => {
     //设置输出帧的大小
     let ff = ffmpeg()
@@ -114,6 +114,9 @@ function resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath,
  * @returns {Promise<unknown>}
  */
 async function scaleVideoByCenter(originVideo, targetWidth, targetHeight, outputPath) {
+  if(!outputPath.endsWith(".mp4")){
+    outputPath = outputPath + ".mp4";
+  }
   // const output = 'scaledOutput.mp4'
   const {
     width,
