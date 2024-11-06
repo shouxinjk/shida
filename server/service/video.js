@@ -2,15 +2,46 @@
 const path = require('path');
 const savePath = require('../../server/config/index');//下载的在线视频存放路径
 const fs = require('fs-extra');
-const {isEmpty, forEach} = require('lodash');
+const {isEmpty, forEach, min} = require('lodash');
 const {FFSubtitle, FFRect, FFScene, FFImage, FFText, FFGifImage, FFVideo, FFAlbum, FFCreator} = require('ffcreator');
 const ffmpeg = require('fluent-ffmpeg');
 const {scaleVideoByCenter} = require("../../utils/crop");
 
 const FFLottie = require('ffcreator/lib/node/lottie');//获取Lottie对象 2024-10-08新增代码
 const axios = require('axios'); 
+const sharp = require('sharp'); 
+const Jimp = require('jimp');
+const https = require('https');
+const { fit } = require('sharp');
 
 const fontRootPath = path.join(__dirname, '../public/static/fonts/');
+
+function parseARGB(value) {
+  const a = (value >> 24) & 0xff; // Alpha
+  const r = (value >> 16) & 0xff; // Red
+  const g = (value >> 8) & 0xff;  // Green
+  const b = value & 0xff;         // Blue
+  return { r, g, b, a };
+}
+async function cropImageCentered(inputPath, targetWidth, targetHeight, outputPath, fit = 'contain') {
+  try {
+    // const image = await Jimp.Jimp.read(inputPath);
+    // console.error(image.getPixelColor(0, 0));
+    // const { r, g, b, a } = parseARGB(image.getPixelColor(0, 0));
+    // console.log(`Pixel at (${10}, ${10}) has color: RGB(${r}, ${g}, ${b}), Alpha(${a})`);
+    await sharp(inputPath)
+      .toFormat('png')
+      .resize(targetWidth, targetHeight, 
+        { fit: fit, position: 'centre', 
+          background: {r: 0, g: 0, b: 0, alpha: 0},
+          // background: {r: r || 0, g: g || 0, b: b || 0, alpha: 1},
+        })
+      .toFile(outputPath);
+    console.log('Image cropped and (optionally resized) successfully.');  
+  } catch (err) {  
+    console.error('Error processing image:', err);  
+  }
+}
 
 //字体判断
 function walk(path, it) {
@@ -91,7 +122,12 @@ const addComponent = async element => {
           comp.setScale(commomStyle.style.scale);
         }
       }else {
-        comp = new FFImage({path: url, ...commomStyle})
+        let inputPath = await preloadImage(url);
+        // let outPutPath = `G:\\video\\videos\\tmpImg_`+new Date().getTime()+'.png';//本地测试
+        let outPutPath = `${savePath.tmpVideoDir}/tmpImg_`+new Date().getTime()+'.png';
+        let fit = commomStyle.style.objectFit || 'contain';
+        await cropImageCentered(inputPath,commomStyle.style.width,commomStyle.style.height,outPutPath,fit);
+        comp = new FFImage({path: outPutPath, ...commomStyle});
         if(commomStyle.style.opacity){
           comp.setOpacity(commomStyle.style.opacity);
         }
@@ -145,7 +181,7 @@ const addComponent = async element => {
       videoUrlCropped = `${savePath.tmpVideoDir}/tmpVideo_`+new Date().getTime();
       // videoUrlCropped = `${path.dirname(url)}/${path.basename(url).split('.')
       //   .shift()}_handled.${path.basename(url).split('.').pop()}`;//原项目代码
-      await scaleVideoByCenter(url, commomStyle.width, commomStyle.height, videoUrlCropped);
+      await scaleVideoByCenter(url, commomStyle.width, commomStyle.height, videoUrlCropped, 'video');
       if (videoUrlCropped) {
         if(!videoUrlCropped.endsWith('.mp4')){
           videoUrlCropped += '_resized.mp4';
@@ -160,7 +196,17 @@ const addComponent = async element => {
 
     case 'qk-image-carousel':
       // console.log("carousel")
-      const list = element.propsValue.imageSrcList.map(x => getImgPath({imageSrc: x}));
+      let list = element.propsValue.imageSrcList.map(x => getImgPath({imageSrc: x}));
+      let listImages = [];
+      for(let i = 0; i < list.length; i++){
+        let inputPath = await preloadImage(list[i]);
+        // let outPutPath = `G:\\video\\videos\\tmpImg_`+new Date().getTime()+'.png';//本地测试
+        let outPutPath = `${savePath.tmpVideoDir}/tmpImg_`+new Date().getTime()+'.png';
+        let fit = commomStyle.style.objectFit || 'contain';
+        await cropImageCentered(inputPath,commomStyle.style.width,commomStyle.style.height,outPutPath,fit);
+        listImages.push(outPutPath);
+      }
+      list = listImages;
       comp = new FFAlbum({list, showCover: true, ...commomStyle});
       comp.setTransition('zoomIn');
       comp.setDuration(element.propsValue.interval);

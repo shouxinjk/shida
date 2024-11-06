@@ -1,7 +1,7 @@
 const ffmpeg = require("fluent-ffmpeg");
 
 /**
- * 图片或视频按中心裁切
+ * 视频按中心裁切
  * @param inputVideoPath 输入视频文件路径
  * @param targetWidth 目标宽度
  * @param targetHeight 目标长度
@@ -75,8 +75,13 @@ async function getDimension(media) {
  * @param padColor 填充颜色
  * @returns {Promise<unknown>}
  */
-function resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath, autoPad = false, padColor) {
-  outputPath = outputPath.split('.')[0] + "_resized.mp4";//输出目录添加后缀，解决输入与输出文件名重复的问题
+function resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath, autoPad = false, padColor,type) {
+  //输出目录添加后缀，解决输入与输出文件名重复的问题
+  if(type === 'video'){
+    outputPath = outputPath.split('.')[0] + "_resized.mp4";
+  }else{
+    outputPath = outputPath.split('.')[0] + "_resized.png";
+  }
   return new Promise((res, rej) => {
     //设置输出帧的大小
     let ff = ffmpeg()
@@ -113,9 +118,15 @@ function resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath,
  * @param outputPath 输出路径
  * @returns {Promise<unknown>}
  */
-async function scaleVideoByCenter(originVideo, targetWidth, targetHeight, outputPath) {
-  if(!outputPath.endsWith(".mp4")){
-    outputPath = outputPath + ".mp4";
+async function scaleVideoByCenter(originVideo, targetWidth, targetHeight, outputPath, type) {
+  if(type === 'image'){
+    if(!outputPath.endsWith(".png")){
+      outputPath = outputPath + ".png";
+    }
+  }else{
+    if(!outputPath.endsWith(".mp4")){
+      outputPath = outputPath + ".mp4";
+    }
   }
   // const output = 'scaledOutput.mp4'
   const {
@@ -137,12 +148,12 @@ async function scaleVideoByCenter(originVideo, targetWidth, targetHeight, output
       outputPath
     )
     console.log("cropped is",cropped);
-    return await resizeVideoByCenter(cropped, targetWidth, targetHeight, outputPath)
+    return await resizeVideoByCenter(cropped, targetWidth, targetHeight, outputPath, null, null, type)
   } else if ((width / height).toFixed(2) < (targetWidth / targetHeight).toFixed(2)) {
     //当原视频的宽高比 小于 目标宽高比 -- 需要填充
-    return await resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath, true)
+    return await resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath, true, null, type)
   } else {
-    return await resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath)
+    return await resizeVideoByCenter(originVideo, targetWidth, targetHeight, outputPath, null, null, type)
   }
 }
 
