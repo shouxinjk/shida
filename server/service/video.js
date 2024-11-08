@@ -43,6 +43,15 @@ async function cropImageCentered(inputPath, targetWidth, targetHeight, outputPat
   }
 }
 
+//获取图片名称
+function getImgName(url){
+  let imgUrl = new URL(url);
+  // 从路径名中提取文件名（包含后缀）
+  var filenameWithExtension = imgUrl.pathname.split('/').pop();
+  var imgName = filenameWithExtension.replace(/\.[^\.]+$/, '');
+  return imgName;
+}
+
 //字体判断
 function walk(path, it) {
   const dirList = fs.readdirSync(path);
@@ -122,11 +131,15 @@ const addComponent = async element => {
           comp.setScale(commomStyle.style.scale);
         }
       }else {
-        let inputPath = await preloadImage(url);
-        // let outPutPath = `G:\\video\\videos\\tmpImg_`+new Date().getTime()+'.png';//本地测试
-        let outPutPath = `${savePath.tmpVideoDir}/tmpImg_`+new Date().getTime()+'.png';
+        // let outPutPath = `${savePath.tmpVideoDir}/tmpImg_`+new Date().getTime()+'.png';
         let fit = commomStyle.style.objectFit || 'contain';
-        await cropImageCentered(inputPath,commomStyle.style.width,commomStyle.style.height,outPutPath,fit);
+        let outPutPath = url;
+        if(fit === 'contain'){//当objectFit为contain时，需要裁剪图片，否则图片会变形
+          let inputPath = await preloadImage(url);
+          // outPutPath = `G:\\video\\videos\\tmpImg_`+getImgName(url)+'.png';//本地测试
+          outPutPath = `${savePath.tmpVideoDir}/tmpImg_`+getImgName(url)+'.png';//线上
+          await cropImageCentered(inputPath,commomStyle.style.width,commomStyle.style.height,outPutPath,fit);
+        }
         comp = new FFImage({path: outPutPath, ...commomStyle});
         if(commomStyle.style.opacity){
           comp.setOpacity(commomStyle.style.opacity);
@@ -199,11 +212,14 @@ const addComponent = async element => {
       let list = element.propsValue.imageSrcList.map(x => getImgPath({imageSrc: x}));
       let listImages = [];
       for(let i = 0; i < list.length; i++){
-        let inputPath = await preloadImage(list[i]);
-        // let outPutPath = `G:\\video\\videos\\tmpImg_`+new Date().getTime()+'.png';//本地测试
-        let outPutPath = `${savePath.tmpVideoDir}/tmpImg_`+new Date().getTime()+'.png';
         let fit = commomStyle.style.objectFit || 'contain';
-        await cropImageCentered(inputPath,commomStyle.style.width,commomStyle.style.height,outPutPath,fit);
+        let outPutPath = list[i];
+        if(fit === 'contain'){//当objectFit为contain时，需要裁剪图片，否则图片会变形
+          let inputPath = await preloadImage(list[i]);
+          // outPutPath = `G:\\video\\videos\\tmpImg_`+getImgName(list[i])+'.png';//本地测试
+          outPutPath = `${savePath.tmpVideoDir}/tmpImg_`+getImgName(list[i])+'.png';//线上
+          await cropImageCentered(inputPath,commomStyle.style.width,commomStyle.style.height,outPutPath,fit);
+        }
         listImages.push(outPutPath);
       }
       list = listImages;
