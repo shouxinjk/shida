@@ -134,12 +134,12 @@ const addComponent = async element => {
         // let outPutPath = `${savePath.tmpVideoDir}/tmpImg_`+new Date().getTime()+'.png';
         let fit = commomStyle.style.objectFit || 'contain';
         let outPutPath = url;
-        if(fit === 'contain'){//当objectFit为contain时，需要裁剪图片，否则图片会变形
+        // if(fit === 'contain'){//当objectFit为contain时，需要裁剪图片，否则图片会变形
           let inputPath = await preloadImage(url);
           // outPutPath = `G:\\video\\videos\\tmpImg_`+getImgName(url)+'.png';//本地测试
           outPutPath = `${savePath.tmpVideoDir}/tmpImg_`+getImgName(url)+'.png';//线上
           await cropImageCentered(inputPath,commomStyle.style.width,commomStyle.style.height,outPutPath,fit);
-        }
+        // }
         comp = new FFImage({path: outPutPath, ...commomStyle});
         if(commomStyle.style.opacity){
           comp.setOpacity(commomStyle.style.opacity);
@@ -156,7 +156,6 @@ const addComponent = async element => {
       break;
 
     case 'qk-subtitle':
-      console.error("subtitle element",element);
       const content = element.propsValue.content;
       comp = new FFSubtitle({content, ...commomStyle});
       comp.setXY(element.propsValue.x, element.propsValue.y)
@@ -167,7 +166,8 @@ const addComponent = async element => {
       comp.setColor(element.propsValue.color || '#fff');
       comp.setBackgroundColor(element.propsValue.backgroundColor || '');
       comp.setDuration(element.propsValue.duration || 1);
-      // console.error("subtitle comp",comp);
+      comp.setStyle({'stroke':''});//去除描边
+      console.log("subtitle comp",comp);
       break;
 
     case 'qk-text':
@@ -179,6 +179,7 @@ const addComponent = async element => {
       if(fs.pathExistsSync(fontFile)){
         comp.setFont(fontFile);
       }else {
+        console.log("进来了！！！~~~~");
         comp.setFont('../public/static/demo/wryh.ttf');
       }
       comp.setAnchor(1);
