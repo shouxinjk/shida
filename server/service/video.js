@@ -101,8 +101,6 @@ const addComponent = async element => {
   switch (element.elName) {
     case 'qk-image':
       url = getImgPath(element.propsValue);
-      // console.log("...commomStyle",commomStyle)
-      // console.log("url",url)
       // url = path.join(__dirname, '../public', element.propsValue.imageSrc)
       const imgExt = path.extname(url).split('.').pop()
       console.log("imgExt",imgExt)
@@ -134,10 +132,11 @@ const addComponent = async element => {
         // let outPutPath = `${savePath.tmpVideoDir}/tmpImg_`+new Date().getTime()+'.png';
         let fit = commomStyle.style.objectFit || 'contain';
         let outPutPath = url;
-        if(fit === 'contain'){//当objectFit为contain时，需要裁剪图片，否则图片会变形
+        // if(fit === 'contain'){//当objectFit为contain时，需要裁剪图片，否则图片会变形
+        if(fit !== 'fill'){
           let inputPath = await preloadImage(url);
-          // outPutPath = `G:\\video\\videos\\tmpImg_`+getImgName(url)+'.png';//本地测试
-          outPutPath = `${savePath.tmpVideoDir}/tmpImg_`+getImgName(url)+'.png';//线上
+          // outPutPath = `G:\\video\\videos\\tmpImg_`+new Date().getTime()+'.png';//本地测试
+          outPutPath = `${savePath.tmpVideoDir}/tmpImg_`+new Date().getTime()+'.png';//线上
           await cropImageCentered(inputPath,commomStyle.style.width,commomStyle.style.height,outPutPath,fit);
         }
         comp = new FFImage({path: outPutPath, ...commomStyle});
