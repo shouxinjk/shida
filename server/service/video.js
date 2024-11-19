@@ -160,12 +160,20 @@ const addComponent = async element => {
       comp.setXY(element.propsValue.x, element.propsValue.y)
       comp.setFrameBuffer(element.propsValue.frameBuffer || 24);
       comp.setText(content);
-      // comp.setStyle(element.style);
       comp.setFontSize(element.propsValue.fontSize || 24);
       comp.setColor(element.propsValue.color || '#fff');
       comp.setBackgroundColor(element.propsValue.backgroundColor || '');
       comp.setDuration(element.propsValue.duration || 1);
-      comp.setStyle({'stroke':''});//去除描边
+
+      const customStyle = { 
+        stroke:'',//去除描边
+        zIndex: 100,
+        wordWrap: true,//设置文字自动换行
+        wordWrapWidth: 550,//设置文字自动换行
+        breakWords: true,//设置文字自动换行
+        align: 'center',
+      };
+      comp.setStyle(customStyle);
       console.log("subtitle comp",comp);
       break;
 
@@ -182,6 +190,9 @@ const addComponent = async element => {
       }
       comp.setAnchor(1);
       comp.alignCenter();
+      if(commomStyle.style.textAlign){
+        comp.setStyle({'textAlign': commomStyle.style.textAlign});
+      }
       break;
 
     case 'qk-video':
