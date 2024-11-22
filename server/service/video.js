@@ -190,8 +190,9 @@ const addComponent = async element => {
       }
       comp.setAnchor(1);
       comp.alignCenter();
-      if(commomStyle.style.textAlign){
+      if(commomStyle.style.textAlign !== 'center'){
         comp.setStyle({'textAlign': commomStyle.style.textAlign});
+        comp.setStyle({'align': commomStyle.style.textAlign});
       }
       break;
 
@@ -234,9 +235,10 @@ const addComponent = async element => {
       }
       list = listImages;
       comp = new FFAlbum({list, showCover: true, ...commomStyle});
-      comp.setTransition('zoomIn');
+      comp.setTransition('fadeIn');
       comp.setDuration(element.propsValue.interval);
-      comp.setTransTime(element.propsValue.transitionTime || 0)
+      comp.setTransTime(0)
+      // comp.setTransTime(element.propsValue.transitionTime || 0)
       break;
   }
 
