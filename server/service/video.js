@@ -194,6 +194,9 @@ const addComponent = async element => {
         comp.setStyle({'textAlign': commomStyle.style.textAlign});
         comp.setStyle({'align': commomStyle.style.textAlign});
       }
+      if(commomStyle.style.opacity){
+        comp.setOpacity(commomStyle.style.opacity);
+      }
       break;
 
     case 'qk-video':
