@@ -199,7 +199,7 @@ const addComponent = async element => {
       }
       console.error("text comp",element.commonStyle);
       if(element.commonStyle.fontStyle){
-        comp.setStyle({'fontStyle': commomStyle.style.fontStyle});
+        comp.setStyle({'fontStyle': element.commonStyle.fontStyle});
       }
       break;
 
