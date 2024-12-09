@@ -197,6 +197,9 @@ const addComponent = async element => {
       if(commomStyle.style.opacity){
         comp.setOpacity(commomStyle.style.opacity);
       }
+      if(commomStyle.style.fontStyle){
+        comp.setStyle({'fontStyle': commomStyle.style.fontStyle});
+      }
       break;
 
     case 'qk-video':
