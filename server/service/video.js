@@ -128,6 +128,7 @@ const addComponent = async element => {
         if(commomStyle.style.scale){
           comp.setScale(commomStyle.style.scale);
         }
+        console.error("lottie comp",comp);
       }else {
         // let outPutPath = `${savePath.tmpVideoDir}/tmpImg_`+new Date().getTime()+'.png';
         let fit = commomStyle.style.objectFit || 'contain';
@@ -199,7 +200,6 @@ const addComponent = async element => {
       }
       if(element.commonStyle.fontStyle){
         comp.setStyle({'fontStyle': element.commonStyle.fontStyle});
-        console.error("text comp",comp);
       }
       break;
 
