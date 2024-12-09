@@ -197,9 +197,9 @@ const addComponent = async element => {
       if(commomStyle.style.opacity){
         comp.setOpacity(commomStyle.style.opacity);
       }
-      console.error("text comp",element.commonStyle);
       if(element.commonStyle.fontStyle){
         comp.setStyle({'fontStyle': element.commonStyle.fontStyle});
+        console.error("text comp",comp);
       }
       break;
 
