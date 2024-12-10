@@ -232,7 +232,8 @@ const addComponent = async element => {
       for(let i = 0; i < list.length; i++){
         let fit = commomStyle.style.objectFit || 'contain';
         let outPutPath = list[i];
-        if(fit === 'contain'){//当objectFit为contain时，需要裁剪图片，否则图片会变形
+        // if(fit === 'contain'){//当objectFit为contain时，需要裁剪图片，否则图片会变形
+        if(fit !== 'fill'){
           let inputPath = await preloadImage(list[i]);
           // outPutPath = `G:\\video\\videos\\tmpImg_`+getImgName(list[i])+'.png';//本地测试
           outPutPath = `${savePath.tmpVideoDir}/tmpImg_`+getImgName(list[i])+'.png';//线上
