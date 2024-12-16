@@ -31,7 +31,7 @@ module.exports = app => ({
    * 注册
    * @returns {Promise<void>}
    */
-  async register() {
+  async register() { 
     const { ctx, $service, $helper } = app;
     const { username, password, email } = ctx.request.body;
 
@@ -48,7 +48,8 @@ module.exports = app => ({
     }
 
     // 验证是否已注册
-    const users = await $service.user.getUsersByQuery({ $or: [{ username }, { email }] });
+    // const users = await $service.user.getUsersByQuery({ $or: [{ username }, { email }] });
+    const users = await $service.user.getUsersByQuery({ $or: [{ username }] });
 
     if (users.length > 0) {
       $helper.returnBody(false, {}, "用户名或邮箱已被注册!");
